@@ -20,7 +20,7 @@ st.title("지역별 중학생 인구 비율")
 
 try:
     # Load the CSV file
-    file_path = '/mnt/data/202312_202312_연령별인구현황_월간 (2).csv'
+    file_path = '202312_202312_연령별인구현황_월간 (2).csv'
     data = pd.read_csv(file_path, encoding='cp949')
     
     region = st.text_input("지역을 입력하세요:", "서울특별시")
