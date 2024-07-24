@@ -3,35 +3,35 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Load the CSV file
-file_path = '/mnt/data/202406_202406_연령별인구현황_월간 (1).csv'
+file_path = '/mnt/data/202312_202312_연령별인구현황_월간 (2).csv'
 data = pd.read_csv(file_path, encoding='cp949')
 
 # Extract relevant columns
-age_columns = ['2024년06월_계_6세', '2024년06월_계_7세', '2024년06월_계_8세', '2024년06월_계_9세', '2024년06월_계_10세', '2024년06월_계_11세']
+middle_school_columns = ['2023년12월_계_12세', '2023년12월_계_13세', '2023년12월_계_14세']
 
-# Function to calculate elementary student population
-def calculate_elementary_pop(region):
+# Function to calculate middle school student population
+def calculate_middle_school_pop(region):
     region_data = data[data['행정구역'].str.contains(region)]
     if region_data.empty:
         st.error("해당 지역을 찾을 수 없습니다.")
-        return None
+        return None, None
     
-    elementary_pop = region_data[age_columns].replace(',', '', regex=True).astype(int).sum(axis=1).values[0]
-    total_pop = region_data['2024년06월_계_총인구수'].replace(',', '', regex=True).astype(int).values[0]
+    middle_school_pop = region_data[middle_school_columns].replace(',', '', regex=True).astype(int).sum(axis=1).values[0]
+    total_pop = region_data['2023년12월_계_총인구수'].replace(',', '', regex=True).astype(int).values[0]
     
-    return elementary_pop, total_pop
+    return middle_school_pop, total_pop
 
 # Streamlit app
-st.title("지역별 초등학생 인구 비율")
+st.title("지역별 중학생 인구 비율")
 
 region = st.text_input("지역을 입력하세요:", "서울특별시")
 
 if region:
-    elementary_pop, total_pop = calculate_elementary_pop(region)
+    middle_school_pop, total_pop = calculate_middle_school_pop(region)
     
-    if elementary_pop is not None:
-        labels = ['초등학생 (6-11세)', '기타 인구']
-        sizes = [elementary_pop, total_pop - elementary_pop]
+    if middle_school_pop is not None:
+        labels = ['중학생 (12-14세)', '기타 인구']
+        sizes = [middle_school_pop, total_pop - middle_school_pop]
         colors = ['#ff9999','#66b3ff']
 
         fig1, ax1 = plt.subplots()
